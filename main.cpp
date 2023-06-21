@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int N = 200;
+int N = 3000;
 int main() {
   init();
   BallTreeNode rootNewBT;
@@ -26,10 +26,24 @@ int main() {
 
   for (int _ = 0; _ <= 30; _++) {
     start = chrono::high_resolution_clock::now();
-    ans.clear(); VerSearchRadius(&rootNewBT, Objects[0], _, ans);
+    ans.clear();
+    VerSearchRadius(&rootNewBT, Objects[0], _, ans);
     end = chrono::high_resolution_clock::now();
-    cout << "Tree ans: " << ans.size() << endl;
-    cout << "Tree time: " << chrono::duration_cast<chrono::duration<double>>(end - start).count() << endl;
+    cout << "VTree ans: " << ans.size() << endl;
+    cout << "VTree time: "
+         << chrono::duration_cast<chrono::duration<double>>(end - start).count()
+         << endl;
+
+
+    start = chrono::high_resolution_clock::now();
+    ans.clear();
+    BaselineSearchRadius(&rootNewBT, Objects[0], _, ans);
+    end = chrono::high_resolution_clock::now();
+    cout << "ETree ans: " << ans.size() << endl;
+    cout << "ETree time: "
+         << chrono::duration_cast<chrono::duration<double>>(end - start).count()
+         << endl;
+
 
     start = chrono::high_resolution_clock::now();
     count = 0;
@@ -39,14 +53,30 @@ int main() {
       }
     }
     end = chrono::high_resolution_clock::now();
-  
-    cout << "BF ans: " << count << endl;
-    cout << "BF time: " << chrono::duration_cast<chrono::duration<double>>(end - start).count() << endl;
 
-    if(count!=ans.size())
-    {
-        cout<<"OOBA"<<endl;
-        exit(1);
+    cout << "BF ans: " << count << endl;
+    cout << "BF time: "
+         << chrono::duration_cast<chrono::duration<double>>(end - start).count()
+         << endl;
+
+    start = chrono::high_resolution_clock::now();
+    count = 0;
+    for (auto i : Objects) {
+      // cout<<baselibe_query(i.id, 0, _)<<endl;
+      if (baselibe_query(i.id, 0, _)) {
+        count += 1;
+      }
+    }
+    end = chrono::high_resolution_clock::now();
+
+    cout << "Baseline ans: " << count << endl;
+    cout << "Baseline time: "
+         << chrono::duration_cast<chrono::duration<double>>(end - start).count()
+         << endl;
+
+    if (count != ans.size()) {
+      cout << "OOBA" << endl;
+      exit(1);
     }
   }
 

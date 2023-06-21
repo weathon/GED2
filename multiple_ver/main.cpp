@@ -132,6 +132,7 @@ std::ostream& operator<<(std::ostream& os, const trio& obj) {
     os << obj.a<< " "<<obj.b<<" "<<obj.c;
     return os;
 }
+
 int query(int id1, int id2, ui verify_upper_bound=INF)
 {
 
@@ -163,6 +164,38 @@ int query(int id1, int id2, ui verify_upper_bound=INF)
 	return res;
 }
 
+int baselibe_query(int id1, int id2, ui verify_upper_bound=INF)
+{
+
+	ui lb = db[id1]->ged_lower_bound_filter(db[id2], verify_upper_bound, vlabel_cnt, elabel_cnt, degree_q, degree_g, tmp);
+
+	if (lb > verify_upper_bound)
+		// return -1;
+		return 0;
+
+	Application *app = new Application(verify_upper_bound, verify_upper_bound, "BMao");
+	app->init(db[id1], db[id2]);
+	int res = INF;
+
+	res = app->AStar();
+
+	if (res <= verify_upper_bound)
+	{
+		delete app;
+		return 1;
+	}
+	else
+	{
+		delete app;
+		return 0;
+	}
+		// res = -1;
+
+	// // printf("%d", res);
+
+	// delete app;
+	// return res;
+}
 trio verify(int id1, int id2, ui verify_upper_bounds[3]) //return 1 if >= 
 {
 	ui min_verify_upper_bound = INF; //why i set it as -1

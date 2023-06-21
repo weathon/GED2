@@ -47,15 +47,22 @@ bool cmp(dataPoint list1, dataPoint list2) {
 void getData(vector<dataPoint> myArray, float &theMax, float &theMin,
              float &inner, float &outer) {
   sort(myArray.begin(), myArray.end(), cmp);
-  if(myArray.size()<2)
-  {
-        cout<<"FUCK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~"<<endl; //Ha found ya!
-        exit(1);
+  //   if(myArray.size()<2)
+  //   {
+  //         cout<<"FUCK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~"<<endl;
+  //         //Ha found ya! exit(1);
+  //   }
+  if (myArray.size() < 2) {
+    theMax = myArray[myArray.size() - 1].distanceFromDad;
+    theMin = myArray[0].distanceFromDad;
+    inner = myArray[myArray.size() / 2].distanceFromDad;
+    outer = myArray[myArray.size() / 2].distanceFromDad;
+  } else {
+    theMax = myArray[myArray.size() - 1].distanceFromDad;
+    theMin = myArray[0].distanceFromDad;
+    inner = myArray[myArray.size() / 2 - 1].distanceFromDad;
+    outer = myArray[myArray.size() / 2].distanceFromDad;
   }
-  theMax = myArray[myArray.size() - 1].distanceFromDad;
-  theMin = myArray[0].distanceFromDad;
-  inner = myArray[myArray.size() / 2 - 1].distanceFromDad;
-  outer = myArray[myArray.size() / 2].distanceFromDad;
   // cout<<"min"<<theMin<<endl;
 }
 
@@ -87,10 +94,12 @@ void ConstructBallTree(BallTreeNode *BT, vector<dataPoint> localobjetcs) {
 
   for (int i = 0; i < localobjetcs.size(); i++) {
     localobjetcs[i].distanceFromDad = d((BT->myobject), localobjetcs[i]);
-    if(localobjetcs[i].distanceFromDad<0)
-    {
-        cout<<"FUCK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~"<<endl; //jiashangzhege ji buucochucuole xkou xkouxkouhaishitongkouke shouzhi haishiemeibaocunzaochendge
-        exit(1);
+    if (localobjetcs[i].distanceFromDad < 0) {
+      cout
+          << "FUCK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~"
+          << endl; // jiashangzhege ji buucochucuole xkou
+                   // xkouxkouhaishitongkouke shouzhi haishiemeibaocunzaochendge
+      exit(1);
     }
     localobjetcs[i].ancestorsDistancesList.push_back(
         localobjetcs[i].distanceFromDad);
@@ -173,7 +182,8 @@ void VerSearchRadius(BallTreeNode *BT, dataPoint ObjectQ, ui r,
   if (s < 0)
     s = 0;
   ui t[] = {r + 1, s, BT->inner + r + 1};
-  cout << r + 1 << " " << s << " " << BT->inner + r + 1 << endl;   //BT->inner is huge negative???
+//   cout << r + 1 << " " << s << " " << BT->inner + r + 1
+    //    << endl; // BT->inner is huge negative???
   trio res = verify(BT->myobject.id, ObjectQ.id, t);
 
   // if (dis <= r) nonono this is r?=dis so the first is not rif(not dis>r)
@@ -182,14 +192,15 @@ void VerSearchRadius(BallTreeNode *BT, dataPoint ObjectQ, ui r,
     returnObjects.push_back(BT->myobject);
   }
 
-//   if (dis + r >= BT->outer)  (dis >= BT->outer -r)  BT->outer -r <= dis   not
-  // BT->outer - r > dis   not BT->outer - r >= (dis+1) 
-  if(res.b) //nongfanle buyong not uzo wanzhengdeyundekunyunex kk
+  //   if (dis + r >= BT->outer)  (dis >= BT->outer -r)  BT->outer -r <= dis not
+  // BT->outer - r > dis   not BT->outer - r >= (dis+1)
+  if (res.b) // nongfanle buyong not uzo wanzhengdeyundekunyunex kk
   {
     VerSearchRadius(BT->right, ObjectQ, r,
                     returnObjects); // this should be right copilot!!
   }
-//   if (dis - r <= BT->inner)   BT->inner + r >= dis
-  if(not res.c)
-  { VerSearchRadius(BT->left, ObjectQ, r, returnObjects); }
+  //   if (dis - r <= BT->inner)   BT->inner + r >= dis
+  if (not res.c) {
+    VerSearchRadius(BT->left, ObjectQ, r, returnObjects);
+  }
 }
