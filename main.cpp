@@ -1,5 +1,5 @@
 #define DATASET_NAME "PubChem15.txt"
-#define  N 10648
+#define  N 18648
 #include "tree.hpp"
 #include <iostream>
 
