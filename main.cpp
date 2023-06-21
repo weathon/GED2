@@ -1,9 +1,11 @@
+#define DATASET_NAME "PubChem15.txt"
+#define  N 4000
 #include "tree.hpp"
 #include <iostream>
 
 using namespace std;
 
-int N = 3000;
+
 int main() {
   init();
   BallTreeNode rootNewBT;
@@ -23,58 +25,62 @@ int main() {
 
   vector<dataPoint> ans;
   int count = 0;
+  int BF;
+  printf("r, dataset, N, VTree Time, Baseline Time");
+  for (int _ = 0; _ <= 10; _++) {
+    cout << _ << ",";
+    cout << DATASET_NAME << ",";
+    cout << N << ",";
+    // start = chrono::high_resolution_clock::now();
+    // ans.clear();
+    // BaselineSearchRadius(&rootNewBT, Objects[_], 3, ans);
+    // end = chrono::high_resolution_clock::now();
+    // cout << "ETree ans: " << ans.size() << endl;
+    // cout << "ETree time: "
+    //      << chrono::duration_cast<chrono::duration<double>>(end -
+    //      start).count()
+    //      << endl;
 
-  for (int _ = 0; _ <= 30; _++) {
     start = chrono::high_resolution_clock::now();
     ans.clear();
-    VerSearchRadius(&rootNewBT, Objects[0], _, ans);
+    VerSearchRadius(&rootNewBT, Objects[20], _, ans);
     end = chrono::high_resolution_clock::now();
-    cout << "VTree ans: " << ans.size() << endl;
-    cout << "VTree time: "
-         << chrono::duration_cast<chrono::duration<double>>(end - start).count()
-         << endl;
+    // cout << "VTree ans: " << ans.size() << endl;
+    cout << chrono::duration_cast<chrono::duration<double>>(end - start).count()
+         << ",";
 
-
-    start = chrono::high_resolution_clock::now();
-    ans.clear();
-    BaselineSearchRadius(&rootNewBT, Objects[0], _, ans);
-    end = chrono::high_resolution_clock::now();
-    cout << "ETree ans: " << ans.size() << endl;
-    cout << "ETree time: "
-         << chrono::duration_cast<chrono::duration<double>>(end - start).count()
-         << endl;
-
-
-    start = chrono::high_resolution_clock::now();
-    count = 0;
-    for (auto i : Objects) {
-      if (d(Objects[0], i) <= _) {
-        count += 1;
-      }
-    }
-    end = chrono::high_resolution_clock::now();
-
-    cout << "BF ans: " << count << endl;
-    cout << "BF time: "
-         << chrono::duration_cast<chrono::duration<double>>(end - start).count()
-         << endl;
+    // start = chrono::high_resolution_clock::now();
+    // count = 0;
+    // for (auto i : Objects) {
+    //   if (d(Objects[20], i) <= _) {
+    //     count += 1;
+    //   }
+    // }
+    // end = chrono::high_resolution_clock::now();
+    // BF = count;
+    // cout << "BF ans: " << count << endl;
+    // cout << "BF time: "
+    //      << chrono::duration_cast<chrono::duration<double>>(end -
+    //      start).count()
+    //      << endl;
 
     start = chrono::high_resolution_clock::now();
     count = 0;
     for (auto i : Objects) {
       // cout<<baselibe_query(i.id, 0, _)<<endl;
-      if (baselibe_query(i.id, 0, _)) {
+      if (baselibe_query(i.id, 20, _)) {
         count += 1;
       }
     }
     end = chrono::high_resolution_clock::now();
 
-    cout << "Baseline ans: " << count << endl;
-    cout << "Baseline time: "
-         << chrono::duration_cast<chrono::duration<double>>(end - start).count()
-         << endl;
+    // cout << "Baseline ans: " << count << endl;
+    // cout << "Baseline time: "
+    cout << chrono::duration_cast<chrono::duration<double>>(end - start).count()
+         << "," << endl;
+    ;
 
-    if (count != ans.size()) {
+    if (BF != ans.size()) {
       cout << "OOBA" << endl;
       exit(1);
     }

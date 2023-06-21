@@ -1,4 +1,5 @@
 #include "multiple_ver/main.cpp"
+#include "progress.cpp"
 #include <algorithm>
 #include <chrono>
 #include <cmath>
@@ -66,6 +67,7 @@ void getData(vector<dataPoint> myArray, float &theMax, float &theMin,
   // cout<<"min"<<theMin<<endl;
 }
 
+int done = 0;
 void ConstructBallTree(BallTreeNode *BT, vector<dataPoint> localobjetcs) {
   // cout<<localobjetcs[0].ancestorsDistancesList.size()<<endl;
   ifNULL(BT) {
@@ -93,6 +95,8 @@ void ConstructBallTree(BallTreeNode *BT, vector<dataPoint> localobjetcs) {
   localobjetcs.pop_back();
 
   for (int i = 0; i < localobjetcs.size(); i++) {
+    printProgressBar(done, N*log2(N));
+    done++;
     localobjetcs[i].distanceFromDad = d((BT->myobject), localobjetcs[i]);
     if (localobjetcs[i].distanceFromDad < 0) {
       cout
@@ -178,29 +182,42 @@ void VerSearchRadius(BallTreeNode *BT, dataPoint ObjectQ, ui r,
                      vector<dataPoint> &returnObjects) {
   ifNULL(BT) { return; }
   // float dis = d(BT->myobject, ObjectQ);
-  float s = BT->outer - r;
+  float s = BT->outer - r - 1;
   if (s < 0)
     s = 0;
-  ui t[] = {r + 1, s, BT->inner + r + 1};
-//   cout << r + 1 << " " << s << " " << BT->inner + r + 1
-    //    << endl; // BT->inner is huge negative???
-  trio res = verify(BT->myobject.id, ObjectQ.id, t);
+  // ui t[] = {r + 1, s, BT->inner + r + 1};
+  //   for (int i = 0; i < 3; i++) {
+  //     cout << t[i] << " ";
+  // }
+  // cout<<endl;
+  //   cout << r + 1 << " " << s << " " << BT->inner + r + 1
+  //    << endl; // BT->inner is huge negative???
+  // trio res = verify(BT->myobject.id, ObjectQ.id, t);
 
   // if (dis <= r) nonono this is r?=dis so the first is not rif(not dis>r)
   // if(not dis>=(r+1))
-  if (not res.a) {
+  // if (not res.a) {
+  if (baselibe_query(ObjectQ.id, BT->myobject.id, r)) {
     returnObjects.push_back(BT->myobject);
   }
 
   //   if (dis + r >= BT->outer)  (dis >= BT->outer -r)  BT->outer -r <= dis not
   // BT->outer - r > dis   not BT->outer - r >= (dis+1)
-  if (res.b) // nongfanle buyong not uzo wanzhengdeyundekunyunex kk
+  // if (res.b) // nongfanle buyong not uzo wanzhengdeyundekunyunex kk
+  if(s<=0)
+  {
+        VerSearchRadius(BT->right, ObjectQ, r,
+                    returnObjects); // this should be right copilot!!
+  }
+  else if(not baselibe_query(ObjectQ.id, BT->myobject.id, s)) 
   {
     VerSearchRadius(BT->right, ObjectQ, r,
                     returnObjects); // this should be right copilot!!
   }
   //   if (dis - r <= BT->inner)   BT->inner + r >= dis
-  if (not res.c) {
+  // if (not res.c) {
+  // if (baselibe_query(ObjectQ.id, BT->myobject.id, BT->inner + r)) 
+  {
     VerSearchRadius(BT->left, ObjectQ, r, returnObjects);
   }
 }

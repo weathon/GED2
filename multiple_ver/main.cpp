@@ -200,12 +200,12 @@ trio verify(int id1, int id2, ui verify_upper_bounds[3]) //return 1 if >=
 {
 	ui min_verify_upper_bound = INF; //why i set it as -1
 	ui max_verify_upper_bound = 0;
-	for(int i=0; i<=3; i++)
+	for(int i=0; i<3; i++)
+	// for(int i=0; i<=3; i++) //FUCK!!!! why = tyanpi guaibudezhemerongyiduileyunkuenyune  hiahishiduide? xkouwangjile  yunsaunkex
 	{
 		min_verify_upper_bound = min(min_verify_upper_bound, verify_upper_bounds[i]);
 		max_verify_upper_bound = max(max_verify_upper_bound, verify_upper_bounds[i]);
 	}
-
 	ui lb = db[id1]->ged_lower_bound_filter(db[id2], max_verify_upper_bound, vlabel_cnt, elabel_cnt, degree_q, degree_g, tmp);
 	// cout<<"lb "<<lb<<endl;
 	if (lb > max_verify_upper_bound)
@@ -223,6 +223,8 @@ trio verify(int id1, int id2, ui verify_upper_bounds[3]) //return 1 if >=
 
 	delete app;
 	trio ret = trio{0,0,0};//forget about this
+	// printf("%d %d %d\n", min_verify_upper_bound, max_verify_upper_bound, res); //gettng inf for max no wonder
+
 	// cout<<res<<endl; //naozibuqingchuduid e axkoukun meibaocun shijiangouchiaojiyunchaojiyunkunyunex
 	if(res>=verify_upper_bounds[0])
 		ret.a = 1;
@@ -237,7 +239,7 @@ void init()
 {
 	bool print_ged = false;
 
-	string database = "./datasets/AIDS.txt";
+	string database = "./datasets/"+string(DATASET_NAME);
 	// string database = "../dataForReal/graphs.txt";
 
 	map<string, ui> vM, eM;
