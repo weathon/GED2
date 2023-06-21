@@ -47,6 +47,11 @@ bool cmp(dataPoint list1, dataPoint list2) {
 void getData(vector<dataPoint> myArray, float &theMax, float &theMin,
              float &inner, float &outer) {
   sort(myArray.begin(), myArray.end(), cmp);
+  if(myArray.size()<2)
+  {
+        cout<<"FUCK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~"<<endl; //Ha found ya!
+        exit(1);
+  }
   theMax = myArray[myArray.size() - 1].distanceFromDad;
   theMin = myArray[0].distanceFromDad;
   inner = myArray[myArray.size() / 2 - 1].distanceFromDad;
@@ -82,6 +87,11 @@ void ConstructBallTree(BallTreeNode *BT, vector<dataPoint> localobjetcs) {
 
   for (int i = 0; i < localobjetcs.size(); i++) {
     localobjetcs[i].distanceFromDad = d((BT->myobject), localobjetcs[i]);
+    if(localobjetcs[i].distanceFromDad<0)
+    {
+        cout<<"FUCK!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!~"<<endl; //jiashangzhege ji buucochucuole xkou xkouxkouhaishitongkouke shouzhi haishiemeibaocunzaochendge
+        exit(1);
+    }
     localobjetcs[i].ancestorsDistancesList.push_back(
         localobjetcs[i].distanceFromDad);
   }
@@ -159,11 +169,11 @@ void VerSearchRadius(BallTreeNode *BT, dataPoint ObjectQ, ui r,
                      vector<dataPoint> &returnObjects) {
   ifNULL(BT) { return; }
   // float dis = d(BT->myobject, ObjectQ);
-  float s = BT->outer - r - 1;
+  float s = BT->outer - r;
   if (s < 0)
-    s = 0; // solved!
-  ui t[] = {r + 1, s, BT->inner + r};
-//   cout << r + 1 << " " << s << " " << BT->inner + r << endl;
+    s = 0;
+  ui t[] = {r + 1, s, BT->inner + r + 1};
+  cout << r + 1 << " " << s << " " << BT->inner + r + 1 << endl;   //BT->inner is huge negative???
   trio res = verify(BT->myobject.id, ObjectQ.id, t);
 
   // if (dis <= r) nonono this is r?=dis so the first is not rif(not dis>r)
@@ -172,13 +182,14 @@ void VerSearchRadius(BallTreeNode *BT, dataPoint ObjectQ, ui r,
     returnObjects.push_back(BT->myobject);
   }
 
-  // if (dis + r >= BT->outer)  (dis >= BT->outer -r)  BT->outer -r <= dis   not
-  // BT->outer - r > dis   not BT->outer - r >= (dis+1) if(not res.b)
+//   if (dis + r >= BT->outer)  (dis >= BT->outer -r)  BT->outer -r <= dis   not
+  // BT->outer - r > dis   not BT->outer - r >= (dis+1) 
+  if(res.b) //nongfanle buyong not uzo wanzhengdeyundekunyunex kk
   {
     VerSearchRadius(BT->right, ObjectQ, r,
                     returnObjects); // this should be right copilot!!
   }
-  // if (dis - r <= BT->inner)   BT->inner + r >= dis
-  // if(res.c)
+//   if (dis - r <= BT->inner)   BT->inner + r >= dis
+  if(not res.c)
   { VerSearchRadius(BT->left, ObjectQ, r, returnObjects); }
 }

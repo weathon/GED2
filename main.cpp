@@ -12,7 +12,7 @@ int main() {
   for (int i = 0; i < N; i++) {
     Objects[i].id = i;
   }
-  cout << "start" << endl;
+  cout << "Read data complete" << endl;
   auto start = chrono::high_resolution_clock::now();
   ConstructBallTree(&rootNewBT, Objects);
   auto end = chrono::high_resolution_clock::now();
