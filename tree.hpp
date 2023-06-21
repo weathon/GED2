@@ -188,3 +188,32 @@ void BaselineSearchRadius(BallTreeNode *BT, dataPoint ObjectQ, float r, vector<d
         BaselineSearchRadius(BT->left, ObjectQ, r, returnObjects);
     }
 }
+
+void VerSearchRadius(BallTreeNode *BT, dataPoint ObjectQ, ui r, vector<dataPoint> &returnObjects)
+{
+    ifNULL(BT)
+    {
+        return;
+    }
+    // float dis = d(BT->myobject, ObjectQ);
+    ui t[]={r, BT->outer - r - 1, BT->inner + r};
+    trio res = verify(BT->myobject.id, ObjectQ.id , t);
+
+    // if (dis <= r) nonono this is r?=dis so the first is not rif(not dis>r) if(not dis>=(r+1))
+    if(not res.a)
+    {
+        returnObjects.push_back(BT->myobject);
+    }
+
+    // if (dis + r >= BT->outer)  (dis >= BT->outer -r)  BT->outer -r <= dis   not BT->outer - r > dis   not BT->outer - r >= (dis+1)
+    // if(not res.b)
+    {
+        VerSearchRadius(BT->right, ObjectQ, r, returnObjects); // this should be right copilot!!
+    }
+    // if (dis - r <= BT->inner)   BT->inner + r >= dis
+    // if(res.c)
+    {
+        VerSearchRadius(BT->left, ObjectQ, r, returnObjects);
+    }
+}
+
