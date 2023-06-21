@@ -132,6 +132,36 @@ std::ostream& operator<<(std::ostream& os, const trio& obj) {
     os << obj.a<< " "<<obj.b<<" "<<obj.c;
     return os;
 }
+int query(int id1, int id2, ui verify_upper_bound=INF)
+{
+
+	ui lb = db[id1]->ged_lower_bound_filter(db[id2], verify_upper_bound, vlabel_cnt, elabel_cnt, degree_q, degree_g, tmp);
+
+	if (lb > verify_upper_bound)
+		return -1;
+	// this is not nessnery for ours because everything we have is already lower or equal to the lower bound
+	// ++candidates_cnt;
+	// Timer t1;
+
+	Application *app = new Application(verify_upper_bound, verify_upper_bound, "BMao");
+	app->init(db[id1], db[id2]);
+	int res = INF;
+
+	res = app->AStar();
+
+	// search_space += app->get_search_space();
+	if (res <= verify_upper_bound)
+	{
+		// ++results_cnt;
+	}
+	else
+		res = -1;
+
+	// printf("%d", res);
+
+	delete app;
+	return res;
+}
 
 trio verify(int id1, int id2, ui verify_upper_bounds[3]) //return 1 if >= 
 {
@@ -151,21 +181,12 @@ trio verify(int id1, int id2, ui verify_upper_bounds[3]) //return 1 if >=
 	// ++candidates_cnt;
 	Timer t1;
 
-	Application *app = new Application(min_verify_upper_bound,max_verify_upper_bound, "BMao");
+	Application *app = new Application(min_verify_upper_bound, max_verify_upper_bound, "BMao");
 	app->init(db[id1], db[id2]);
 	int res = INF;
 
 	res = app->AStar();
 
-	// search_space += app->get_search_space();
-	// if (res <= min_verify_upper_bound)
-	// {
-	// 	// ++results_cnt;
-	// }
-	// else
-	// 	res = -1;
-
-	// printf("%d", res);
 
 	delete app;
 	trio ret = trio{0,0,0};//forget about this
@@ -183,7 +204,7 @@ void init()
 {
 	bool print_ged = false;
 
-	string database = "../datasets/AIDS.txt";
+	string database = "./datasets/AIDS.txt";
 	// string database = "../dataForReal/graphs.txt";
 
 	map<string, ui> vM, eM;
