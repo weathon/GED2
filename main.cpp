@@ -25,16 +25,24 @@ int main() {
   int count = 0;
 
   for (int _ = 0; _ <= 30; _++) {
+    start = chrono::high_resolution_clock::now();
     ans.clear(); VerSearchRadius(&rootNewBT, Objects[0], _, ans);
+    end = chrono::high_resolution_clock::now();
     cout << "Tree ans: " << ans.size() << endl;
+    cout << "Tree time: " << chrono::duration_cast<chrono::duration<double>>(end - start).count() << endl;
 
+    start = chrono::high_resolution_clock::now();
     count = 0;
     for (auto i : Objects) {
       if (d(Objects[0], i) <= _) {
         count += 1;
       }
     }
+    end = chrono::high_resolution_clock::now();
+  
     cout << "BF ans: " << count << endl;
+    cout << "BF time: " << chrono::duration_cast<chrono::duration<double>>(end - start).count() << endl;
+
     if(count!=ans.size())
     {
         cout<<"OOBA"<<endl;
