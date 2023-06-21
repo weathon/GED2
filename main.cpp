@@ -1,10 +1,10 @@
 #define DATASET_NAME "PubChem15.txt"
-#define  N 4000
+#define  N 10648
 #include "tree.hpp"
 #include <iostream>
 
 using namespace std;
-
+float vtime;
 
 int main() {
   init();
@@ -14,10 +14,11 @@ int main() {
   for (int i = 0; i < N; i++) {
     Objects[i].id = i;
   }
-  cout << "Read data complete" << endl;
+  cout << "Read data complete\nTree Building ......" << endl;
   auto start = chrono::high_resolution_clock::now();
   ConstructBallTree(&rootNewBT, Objects);
   auto end = chrono::high_resolution_clock::now();
+  cout<<endl;
   cout << "C++ Tree Build Time: "
        << chrono::duration_cast<chrono::duration<double>>(end - start).count()
        << endl;
@@ -26,7 +27,7 @@ int main() {
   vector<dataPoint> ans;
   int count = 0;
   int BF;
-  printf("r, dataset, N, VTree Time, Baseline Time");
+  printf("r, dataset, N, VTree Time, Baseline Time, VBetter\n");
   for (int _ = 0; _ <= 10; _++) {
     cout << _ << ",";
     cout << DATASET_NAME << ",";
@@ -46,7 +47,8 @@ int main() {
     VerSearchRadius(&rootNewBT, Objects[20], _, ans);
     end = chrono::high_resolution_clock::now();
     // cout << "VTree ans: " << ans.size() << endl;
-    cout << chrono::duration_cast<chrono::duration<double>>(end - start).count()
+    vtime = chrono::duration_cast<chrono::duration<double>>(end - start).count();
+    cout << vtime
          << ",";
 
     // start = chrono::high_resolution_clock::now();
@@ -76,11 +78,11 @@ int main() {
 
     // cout << "Baseline ans: " << count << endl;
     // cout << "Baseline time: "
-    cout << chrono::duration_cast<chrono::duration<double>>(end - start).count()
-         << "," << endl;
+    cout << chrono::duration_cast<chrono::duration<double>>(end - start).count() << ","
+         << (bool(chrono::duration_cast<chrono::duration<double>>(end - start).count()>vtime)?"⭐":"")<< endl;
     ;
 
-    if (BF != ans.size()) {
+    if (count != ans.size()) {
       cout << "OOBA" << endl;
       exit(1);
     }

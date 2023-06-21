@@ -16,7 +16,7 @@ void printProgressBar(int progress, int total, int barWidth = 40) {
 
   float ratio = static_cast<float>(progress) / total;
   int filledWidth = static_cast<int>(ratio * barWidth);
-  ETL =  (time(0)-startedTime)/(progress+0.001)*(total-progress);
+  ETL =  (time(0)-startedTime)/(progress+0.001)*(total-progress)*0.8;
   std::cout << " " << progress << "/" << total << " [";
   for (int i = 0; i < barWidth; ++i) {
     if (i < filledWidth)
@@ -26,7 +26,7 @@ void printProgressBar(int progress, int total, int barWidth = 40) {
     else
       std::cout << " ";
   }
-  std::cout << "] " << static_cast<int>(ratio * 100.0) << "% "<< "Estimated Time Left: " << ETL/60 <<" min"<<ETL%60<< "sec \r";
+  std::cout << "] " << static_cast<int>(ratio * 100.0) << "% "<< "Estimated Time Left: " << ETL/60 <<" min "<<ETL%60<< " sec \r";
   std::cout.flush();
 }
 
