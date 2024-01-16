@@ -16,6 +16,7 @@ typedef vector<float> floatArray;
 // #define print(x) cout << x << endl;
 #define print(x, y) cout << x << " " << y << endl;
 
+#define INNER_CONSTANT 5;
 struct dataPoint {
   floatArray data;
   int id;

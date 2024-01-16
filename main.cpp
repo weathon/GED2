@@ -1,5 +1,6 @@
 #define DATASET_NAME "PubChem15.txt"
-#define  N 18648
+// #define  N 100
+#define  N 18648 
 #include "tree.hpp"
 #include <iostream>
 
@@ -27,7 +28,7 @@ int main() {
   vector<dataPoint> ans;
   int count = 0;
   int BF;
-  printf("r, dataset, N, VTree Time, Baseline Time, VBetter\n");
+  printf("r,dataset,N,VTree Time,Baseline Time,VBetter\n");
   for (int _ = 0; _ <= 10; _++) {
     cout << _ << ",";
     cout << DATASET_NAME << ",";
